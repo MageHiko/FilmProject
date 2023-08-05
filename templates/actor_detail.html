@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}{{film.name}}{% endblock %}
+
+{% block content %}
+    <div class = "container mt-3">
+        <div class="card mb-3" style="max-width: 100%">
+            <div class="row g-0">
+              <div class="col-md-4">
+                {% if actor.image%}
+                <img src="{{actor.image.url}}" class="img-fluid rounded-start" alt="{{actor.name}}">
+                {%endif%}
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{actor.name}} {{actor.surname}}</h5>
+                  <p class="card-text">{{actor.about}}</p>
+                  <p class="card-text"><small class="text-body-secondary">Actor age {{actor.age}}</small></p>
+                  {% if request.user.is_authenticated %}
+                  <form method = "POST">
+                    {% csrf_token%}
+                    <input type="hidden" name="choice" value="like">
+                    <input type="hidden" name="actor_id" value="{{actor.id}}">
+                    <button type="submit" class="btn btn-primary">Like ({{actor.actor_likes.all | length}}) </button>
+                </form>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class = 'container'>
+      <h5>Comments</h5>
+      {% if request.user.is_authenticated %}
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="choice" value="comment">
+        <input type="hidden" name = "actor_id" value="{{ actor.id }}">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Write your comment</label>
+          <textarea name = "content" class = "form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> </textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      {% endif%}
+      {% for comment in actor.actor_comments.all %}
+      <div class="card my-3">
+        <div class="card-header">
+          {{ comment.user.username }}
+          {% if comment in user_comments or request.user.is_staff %}
+          <a href="{% url 'delete-comment' comment.id %}">Delete</a>
+          {%endif%}
+        </div>
+        <div class="card-body">
+          <blockquote class="blockquote mb-0">
+            <p>{{ comment.content }}</p>
+            <footer class="blockquote-footer">{{ comment.pub_date }}</cite></footer>
+          </blockquote>
+          {% if request.user.is_authenticated %}
+          <form method = "POST">
+            {% csrf_token%}
+            <input type="hidden" name="choice" value="like_comment">
+            <input type="hidden" name="comment_id" value="{{comment.id}}">
+            <button type="submit" class="btn btn-primary">Like ({{comment.comment_likes.all | length}}) </button>
+        </form>
+        {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+{% endblock%}

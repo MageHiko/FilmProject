@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Films{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1> Films </h1>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for film in films %}
+            <div class="col">
+              <div class="card">
+                {% if film.poster%}
+                <img src="{{film.poster.url}}" width="10" height="200" class="card-img-top" alt="{{ film.name }}">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{% url 'detail' film.id %}"> {{ film.name }} </a> </h5>
+                  <p class="card-text"> {{ film.pub_date }} </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+{% endblock %}

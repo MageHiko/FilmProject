@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{film.name}}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1> Actors </h1>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for actor in actors %}
+            <div class="col">
+              <div class="card">
+                {% if actor.image %}
+                <img src="{{actor.image.url}}" width="10" height="200" class="card-img-top" alt="{{ actor.name }} {{actor.surname}}">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{% url 'actor_detail' actor.id %}"> {{ actor.name }} {{actor.surname}} </a> </h5>
+                  <p class="card-text"> {{ actor.age }} </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+
+{% endblock%}

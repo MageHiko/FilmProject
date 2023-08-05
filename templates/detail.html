@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}{{film.name}}{% endblock %}
+
+{% block content %}
+    <div class = "container mt-3">
+        <div class="card mb-3" style="max-width: 100%">
+            <div class="row g-0">
+              <div class="col-md-4">
+                {% if film.poster%}
+                <img src="{{film.poster.url}}" class="img-fluid rounded-start" alt="{{film.name}}">
+                {%endif%}
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{film.name}}</h5>
+                  <p class="card-text">{{film.about}}</p>
+                  <p class="card-text"><small class="text-body-secondary">Published {{film.pub_date}}</small></p>
+                  {% if request.user.is_authenticated %}
+                  <form method = "POST">
+                    {% csrf_token%}
+                    <input type="hidden" name="choice" value="like">
+                    <input type="hidden" name="film_id" value="{{film.id}}">
+                    <button type="submit" class="btn btn-primary">Like ({{film.film_likes.all | length}}) </button>
+                </form>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="container">
+        {% if film.video %}
+        <video width="100%" height="100%" controls loop>
+            <source src="{{film.fragman.url}}" type="video/mp4">
+            <source src="{{film.fragman.url}}" type="video/ogg">
+        </video>
+        {% else %}
+        <p> Video does not exit </p>
+        {% endif %}
+    </div>
+    <div class = 'container'>
+      <h5>Comments</h5>
+      {% if request.user.is_authenticated %}
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="choice" value="comment">
+        <input type="hidden" name = "film_id" value="{{ film.id }}">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Write your comment</label>
+          <textarea name = "content" class = "form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> </textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      {% endif%}
+      {% for comment in film.film_comments.all %}
+      <div class="card my-3">
+        <div class="card-header">
+          {{ comment.user.username }}
+          {% if comment in user_comments or request.user.is_staff %}
+          <a href="{% url 'delete-comment' comment.id %}">Delete</a>
+          {%endif%}
+        </div>
+        <div class="card-body">
+          <blockquote class="blockquote mb-0">
+            <p>{{ comment.content }}</p>
+            <footer class="blockquote-footer">{{ comment.pub_date }}</cite></footer>
+          </blockquote>
+          {% if request.user.is_authenticated %}
+          <form method = "POST" class="mt-1">
+            {% csrf_token%}
+            <input type="hidden" name="choice" value="like_comment">
+            <input type="hidden" name="comment_id" value="{{comment.id}}">
+            <button type="submit" class="btn btn-primary">Like ({{comment.comment_likes.all | length}}) </button>
+          </form>
+        {% endif %}
+        </div>
+        
+      </div>
+      {% endfor %}
+    </div>
+    
+{% endblock %}

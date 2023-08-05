@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}User_views{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if film_likes %}
+        <h4> Liked Films </h4>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for like in film_likes %}
+            <div class="col">
+              <div class="card">
+                {% if like.film.poster %}
+                <img src="{{like.film.poster.url}}" width="10" height="200" class="card-img-top" alt="{{ like.film.name }}">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{% url 'detail' like.film.id %}"> {{ like.film.name }} </a> </h5>
+                  <p class="card-text"> {{ like.film.pub_date }} </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        {% if actor_likes %}
+        <h4> Liked Actors </h4>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for like in actor_likes %}
+            <div class="col">
+              <div class="card">
+                {% if like.actor.image %}
+                <img src="{{like.actor.image.url}}" width="10" height="200" class="card-img-top" alt="{{ like.actor.name }} {{like.actor.surname}}">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{% url 'actor_detail' like.actor.id %}"> {{ like.actor.name }} {{like.actor.surname}} </a> </h5>
+                  <p class="card-text"> {{ like.actor.age }} </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        {% if film_comments %}
+        <h4> Commented Films </h4>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for comment in film_comments %}
+            <div class="col">
+              <div class="card">
+                {% if comment.film.image %}
+                <img src="{{comment.film.image.url}}" width="10" height="200" class="card-img-top" alt="{{ comment.film.name }}">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{% url 'detail' comment.film.id %}"> {{ comment.film.name }} </a> </h5>
+                  <p class="card-text"> {{ comment.film.pub_date }} </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        {% if actor_comments %}
+        <h4> Comented Actors </h4>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for comment in actor_comments %}
+            <div class="col">
+              <div class="card">
+                {% if comment.actor.image %}
+                <img src="{{comment.actor.image.url}}" width="10" height="200" class="card-img-top" alt="{{ comment.actor.name }} {{comment.actor.surname}}">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{% url 'actor_detail' comment.actor.id %}"> {{ comment.actor.name }} {{comment.actor.surname}} </a> </h5>
+                  <p class="card-text"> {{ comment.actor.age }} </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        {% if film_views %}
+        <h4> Viewed Films </h4>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for view in film_views %}
+            <div class="col">
+              <div class="card">
+                {% if view.film.image %}
+                <img src="{{view.film.image.url}}" width="10" height="200" class="card-img-top" alt="{{ view.film.name }}">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{% url 'detail' view.film.id %}"> {{ view.film.name }} </a> </h5>
+                  <p class="card-text"> {{ view.film.pub_date }} </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        {% if actor_views %}
+        <h4> Viewed Actors </h4>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for view in actor_views %}
+            <div class="col">
+              <div class="card">
+                {% if view.actor.image %}
+                <img src="{{view.actor.image.url}}" width="10" height="200" class="card-img-top" alt="{{ view.actor.name }} {{view.actor.surname}}">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{% url 'actor_detail' view.actor.id %}"> {{ view.actor.name }} {{view.actor.surname}} </a> </h5>
+                  <p class="card-text"> {{ view.actor.age }} </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+    </div>
+{% endblock %}
